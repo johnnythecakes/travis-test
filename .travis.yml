@@ -1,12 +1,18 @@
 language: ruby
 rvm:
-  - 2.0.0-p481
+- 2.0.0-p481
 branches:
   only:
-    - master
+  - master
 install:
-  - "travis_retry bundle install" 
-
+- travis_retry bundle install
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-
+- psql -c 'create database travis_ci_test;' -U postgres
+deploy:
+  provider: heroku
+  api_key:
+    secure: BUu1dcwg1VILQRTNAta+jC5bHE3AFHnvmblx7zxOcKgolpSZqxXdxtlfDwQJFKNqbfZxdBHivWn+IhD46MeepwmAyBvS3gb2LgwdZivLImzJQWWiSNjkEgJYdw243v+1dR5gvjnnY8mL7WfO+JEyGY1q9bjUocnMNVhnb2PsmQY=
+  app: warm-tor-9493
+  run:
+    - "rake db:migrate"
+    - restart
